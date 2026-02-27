@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KrownOsint | Elite System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050505; color: #ff0000; font-family: 'Courier New', monospace; }
+        .krown-panel { background: #0a0a0a; border: 1px solid #440000; box-shadow: 0 0 15px #300; }
+        .glitch { animation: glitch 1s linear infinite; }
+        @keyframes glitch { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        input { background: #111; border: 1px solid #400; color: #f44; text-align: center; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div id="auth-wall" class="krown-panel p-10 max-w-md w-full text-center">
+        <h1 class="text-4xl font-black mb-6 glitch tracking-tighter italic">KROWN<span class="text-white">OSINT</span></h1>
+        <input type="text" id="user-key" placeholder="ACCESS_KEY_XXX" class="w-full p-3 mb-6 font-bold">
+        <button onclick="bootSystem()" id="boot-btn" class="w-full bg-red-900 text-white py-3 font-bold hover:bg-red-600 transition">INITIALIZE LINK</button>
+    </div>
+
+    <div id="dashboard" class="hidden w-full max-w-5xl">
+        <div class="krown-panel p-8">
+            <header class="flex justify-between border-b border-red-900 pb-4 mb-6">
+                <span class="font-bold">SYSTEM ACTIVE</span>
+                <span class="text-xs text-red-800">UPLINK: STABLE</span>
+            </header>
+            
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="scan-input" placeholder="Search Target..." class="flex-grow p-2 text-left">
+                <button onclick="runScan()" class="bg-red-700 text-white px-6 font-bold hover:bg-red-500">SCAN</button>
+            </div>
+            
+            <pre id="output" class="bg-black border border-zinc-900 p-4 h-64 overflow-y-auto text-xs text-red-500">Ready for query...</pre>
+        </div>
+    </div>
+
+    <script>
+        /* OBFUSCATED GOOGLE WEB APP URL */
+        // Replace this string with your BASE64 encoded Apps Script URL
+        const _0xDB = "YOUR_BASE64_ENCODED_APPS_SCRIPT_URL_HERE";
+        
+        // This is your Spreadsheet link obfuscated (just for your reference)
+        const _0xREF = "aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFkc2hlZXRzL2QvMVo0blM4WlE0ZHFwY0ZLMWMtaWw0NVZiTm9IUUE5S3hrVy0tdkd4YjRYUS9lZGl0P3VzcD1kcml2ZXNkaw==";
+
+        async function bootSystem() {
+            const key = document.getElementById('user-key').value;
+            const btn = document.getElementById('boot-btn');
+            btn.innerText = "AUTHENTICATING...";
+
+            try {
+                const response = await fetch(`${atob(_0xDB)}?key=${key}&action=verify`);
+                const status = await response.text();
+
+                if (status === "VALID") {
+                    document.getElementById('auth-wall').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                } else {
+                    alert("INVALID TOKEN");
+                    btn.innerText = "INITIALIZE LINK";
+                }
+            } catch (e) {
+                alert("UPLINK ERROR: Check Apps Script Deployment");
+                btn.innerText = "RETRY";
+            }
+        }
+
+        async function runScan() {
+            const query = document.getElementById('scan-input').value;
+            const key = document.getElementById('user-key').value;
+            const out = document.getElementById('output');
+            
+            out.innerText = "> Fetching data via encrypted proxy...";
+            
+            const response = await fetch(`${atob(_0xDB)}?key=${key}&action=search&q=${query}`);
+            const data = await response.json();
+            out.innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
